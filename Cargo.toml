@@ -1,7 +1,7 @@
 [package]
 name = "sysnames"
 description = "Query Linux system call names and numbers at runtime"
-version = "0.1.1"
+version = "0.1.2"
 authors = ["William Findlay <william@williamfindlay.com>"]
 repository = "https://github.com/willfindlay/sysnames-rs"
 homepage = "https://github.com/willfindlay/sysnames-rs"
