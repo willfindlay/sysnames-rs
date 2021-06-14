@@ -17,6 +17,13 @@ mod syscalls;
 pub struct Syscalls;
 impl Syscalls {
     /// Get a system call name by its number, if it exists on your architecture.
+    ///
+    /// ```rust
+    /// use sysnames::Syscalls;
+    ///
+    /// let execve_num = Syscalls::number("execve");
+    /// assert!(execve_num.is_some());
+    /// ```
     pub fn number(name: &str) -> Option<u64> {
         syscalls::SYSCALL_NUMS
             .get_by_left(name.to_lowercase().as_str())
@@ -24,8 +31,15 @@ impl Syscalls {
     }
 
     /// Get a system call number by its name, if it exists on your architecture.
-    pub fn name(number: &u64) -> Option<&str> {
-        syscalls::SYSCALL_NUMS.get_by_right(number).cloned()
+    ///
+    /// ```rust
+    /// use sysnames::Syscalls;
+    ///
+    /// let execve_name = Syscalls::name(59);
+    /// assert!(execve_name.is_some());
+    /// ```
+    pub fn name<'a>(number: u64) -> Option<&'a str> {
+        syscalls::SYSCALL_NUMS.get_by_right(&number).cloned()
     }
 }
 
@@ -36,7 +50,7 @@ mod tests {
     #[test]
     fn name_number_bijection_test() {
         let number = Syscalls::number("execve").unwrap();
-        let name = Syscalls::name(&number).unwrap();
+        let name = Syscalls::name(number).unwrap();
         assert_eq!(name, "execve");
     }
 }
