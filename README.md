@@ -1,8 +1,16 @@
 # Sysnames
 
+[![crates.io badge](https://img.shields.io/crates/v/sysnames.svg)](https://crates.io/crates/sysnames)
+
 A Rust library for Linux system call names and numbers based on [Marcin Juszkiewicz's excellent repository].
 The goal is to help you work with system call information in Rust.
 For example, this library might be particularly useful when working with [libbpf-rs].
+
+To use this in your project:
+```toml
+[dependencies]
+sysnames = "0.1"
+```
 
 ## Disclaimer
 
