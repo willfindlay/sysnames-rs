@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 //
-// Linux system call names and numbers.
+// Query Linux system call names and numbers at runtime.
 // Copyright (c) 2021  William Findlay
 //
 // June 14, 2021  William Findlay  Created this.
