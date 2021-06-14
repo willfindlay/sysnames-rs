@@ -1,12 +1,19 @@
 [package]
 name = "sysnames"
 description = "Query Linux system call names and numbers at runtime"
-license = "MIT"
 version = "0.1.0"
 authors = ["William Findlay <william@williamfindlay.com>"]
+repository = "https://github.com/willfindlay/sysnames-rs"
+homepage = "https://github.com/willfindlay/sysnames-rs"
+readme = "README.md"
 edition = "2018"
+license = "MIT"
+keywords = ["linux", "syscall", "system call"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[badges]
+maintenance = { status = "actively-developed" }
 
 [dependencies]
 lazy_static = "1.4.0"
