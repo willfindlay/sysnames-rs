@@ -18,7 +18,9 @@ pub struct Syscalls;
 impl Syscalls {
     /// Get a system call name by its number, if it exists on your architecture.
     pub fn number(name: &str) -> Option<u64> {
-        syscalls::SYSCALL_NUMS.get_by_left(name).cloned()
+        syscalls::SYSCALL_NUMS
+            .get_by_left(name.to_lowercase().as_str())
+            .cloned()
     }
 
     /// Get a system call number by its name, if it exists on your architecture.
