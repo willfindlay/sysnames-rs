@@ -8,6 +8,10 @@
 //! Get system call information for the Linux kernel according to your target
 //! architecture.
 
+#![crate_name = "sysnames"]
+// Only supported on Linux (for now)
+#![cfg(target_os = "linux")]
+// Everything should be documented
 #![deny(missing_docs)]
 
 mod syscalls;
@@ -52,5 +56,15 @@ mod tests {
         let number = Syscalls::number("execve").unwrap();
         let name = Syscalls::name(number).unwrap();
         assert_eq!(name, "execve");
+    }
+
+    #[test]
+    #[cfg(target_arch = "x86_64")]
+    fn execve_x86_64_test() {
+        let name = Syscalls::name(59).unwrap();
+        assert_eq!(name, "execve");
+
+        let number = Syscalls::number("execve").unwrap();
+        assert_eq!(number, 59);
     }
 }
