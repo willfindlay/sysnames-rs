@@ -10,6 +10,7 @@ use std::env;
 use std::fmt::Write as _;
 use std::fs::File;
 use std::io::Write as _;
+use std::path::PathBuf;
 use std::process::Command;
 
 use anyhow::Result;
@@ -61,6 +62,7 @@ fn ingest() -> HashMap<String, HashMap<String, u64>> {
 }
 
 fn generate(syscalls: &HashMap<String, HashMap<String, u64>>) -> Result<()> {
+    let out_path = PathBuf::from(format!("{}/syscalls.rs", env::var("OUT_DIR").unwrap()));
     let mut out_str = String::new();
 
     write!(
@@ -100,10 +102,9 @@ fn generate(syscalls: &HashMap<String, HashMap<String, u64>>) -> Result<()> {
         )?;
     }
 
-    File::create(format!("{}/syscalls.rs", env::var("OUT_DIR").unwrap()))?
-        .write_all(&out_str.into_bytes())?;
+    File::create(&out_path)?.write_all(&out_str.into_bytes())?;
 
-    let status = Command::new("rustfmt").arg("src/syscalls.rs").status()?;
+    let status = Command::new("rustfmt").arg(out_path).status()?;
     assert!(status.success());
 
     Ok(())
