@@ -8,7 +8,7 @@ homepage = "https://github.com/willfindlay/sysnames-rs"
 readme = "README.md"
 edition = "2018"
 license = "MIT"
-keywords = ["linux", "syscall", "system call"]
+keywords = ["linux", "syscall"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
