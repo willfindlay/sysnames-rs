@@ -13,13 +13,13 @@ use std::io::Write as _;
 use std::path::PathBuf;
 use std::process::Command;
 
-use anyhow::Result;
 use csv::ReaderBuilder;
 use glob::glob;
 
 pub fn main() {
+    println!("cargo:rerun-if-changed=syscalls-table");
     let syscalls = ingest();
-    generate(&syscalls).expect("Failed to generate syscalls");
+    generate(&syscalls);
 }
 
 fn ingest() -> HashMap<String, HashMap<String, u64>> {
@@ -61,7 +61,7 @@ fn ingest() -> HashMap<String, HashMap<String, u64>> {
     map
 }
 
-fn generate(syscalls: &HashMap<String, HashMap<String, u64>>) -> Result<()> {
+fn generate(syscalls: &HashMap<String, HashMap<String, u64>>) {
     let out_path = PathBuf::from(format!("{}/syscalls.rs", env::var("OUT_DIR").unwrap()));
     let mut out_str = String::new();
 
@@ -71,7 +71,8 @@ fn generate(syscalls: &HashMap<String, HashMap<String, u64>>) -> Result<()> {
         use bimap::BiMap;
         use lazy_static::lazy_static;
         "#,
-    )?;
+    )
+    .unwrap();
 
     for (arch, syscalls) in syscalls {
         write!(
@@ -82,7 +83,8 @@ fn generate(syscalls: &HashMap<String, HashMap<String, u64>>) -> Result<()> {
                 pub static ref SYSCALL_NUMS: BiMap<&'static str, u64> = [
             "#,
             arch = arch,
-        )?;
+        )
+        .unwrap();
         for (name, number) in syscalls {
             write!(
                 out_str,
@@ -91,7 +93,8 @@ fn generate(syscalls: &HashMap<String, HashMap<String, u64>>) -> Result<()> {
                 "#,
                 name = name,
                 number = number,
-            )?;
+            )
+            .unwrap();
         }
         write!(
             out_str,
@@ -99,13 +102,18 @@ fn generate(syscalls: &HashMap<String, HashMap<String, u64>>) -> Result<()> {
                 ].iter().copied().collect();
             }}
             "#,
-        )?;
+        )
+        .unwrap();
     }
 
-    File::create(&out_path)?.write_all(&out_str.into_bytes())?;
+    File::create(&out_path)
+        .expect("Failed to open syscalls.rs for writing")
+        .write_all(&out_str.into_bytes())
+        .expect("Failed to write to syscalls.rs");
 
-    let status = Command::new("rustfmt").arg(out_path).status()?;
+    let status = Command::new("rustfmt")
+        .arg(out_path)
+        .status()
+        .expect("Failed to run rustfmt");
     assert!(status.success());
-
-    Ok(())
 }
